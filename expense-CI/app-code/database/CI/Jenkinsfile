@@ -8,7 +8,7 @@ def config = [
 
     // Git Variables
     EXECUTE_GITCHECKOUT_STAGE: "yes",
-    MY_GIT_URL: "https://github.com/vaheedgithubac/expense.git", // required
+    MY_GIT_URL: "https://github.com/vaheedgit26/expense.git", // required
     MY_GIT_REPO_TYPE: "public",   // required (public/private)
     MY_GIT_CREDENTIALS_ID: "",    // required for private repos
     MY_GIT_BRANCH: "",            // Defaults to "main" if not set
@@ -31,7 +31,7 @@ def config = [
     
     // DOCKER BUILD Variables
     EXECUTE_DOCKER_IMAGE_BUILD_STAGE: "yes",   // required (yes/no)
-    DOCKER_CONTEXT: "app-code/database",       // defaults to "."
+    DOCKER_CONTEXT: "expense-CI/app-code/database",       // defaults to "."
     DOCKERFILE: "Dockerfile",                  // defaults to 'Dockerfile' and it expects 'Dockerfile' in the 'DOCKER_CONTEXT' directory
       
     // TRIVY IMAGE SCAN Variables
