@@ -9,7 +9,7 @@ spec:
     # - https://github.com/my-org/*              # Allow all repos under your org
     # - https://github.com/my-org/expense.git  # Or specific repo
     
-    - https://github.com/vaheedgithubac/expense.git
+    - https://github.com/vaheedgit26/expense.git
 
   # Allowed destinations (namespaces + clusters)
   destinations:
