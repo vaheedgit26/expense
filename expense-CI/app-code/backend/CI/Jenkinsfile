@@ -8,14 +8,14 @@ def config = [
 
     // Git Variables
     EXECUTE_GITCHECKOUT_STAGE: "yes",
-    MY_GIT_URL: "https://github.com/vaheedgithubac/expense.git", // required
+    MY_GIT_URL: "https://github.com/vaheedgit26/expense.git", // required
     MY_GIT_REPO_TYPE: "public",   // required (public/private)
     MY_GIT_CREDENTIALS_ID: "",    // required for private repos
     MY_GIT_BRANCH: "",            // Defaults to "main" if not set
 
     // TRIVY FS SCAN Variables
     EXECUTE_TRIVY_FS_STAGE: "yes",             // required (yes/no)
-    TRIVY_FS_TARGET: "app-code/backend/code",  // Defaults to "." (Current File System)
+    TRIVY_FS_TARGET: "expense-CI/app-code/backend/code",             // Defaults to "." (Current File System)
     TRIVY_FS_SCAN_FORMAT: "table",             // required
     TRIVY_FS_OUTPUT_FORMAT: "txt",             // required 
     TRIVY_FS_SEVERITY: "HIGH,MEDIUM,LOW",      // Default to "HIGH,MEDIUM,LOW"
@@ -31,7 +31,7 @@ def config = [
     
     // DOCKER BUILD Variables
     EXECUTE_DOCKER_IMAGE_BUILD_STAGE: "yes",   // required (yes/no)
-    DOCKER_CONTEXT: "app-code/backend",        // defaults to "."
+    DOCKER_CONTEXT: "expense-CI/app-code/backend",        // defaults to "."
     DOCKERFILE: "Dockerfile",                  // defaults to 'Dockerfile' and it expects 'Dockerfile' in the 'DOCKER_CONTEXT' directory
     
     // TRIVY IMAGE SCAN Variables
@@ -53,21 +53,21 @@ def config = [
 
     // Update Image Tag in GitHub Deploy DOCKER 
     UPDATE_IMAGE_TAG_GITHUB_DEPLOY_DOCKER: "yes",
-    DEPLOYMENT_FILE: "app-code/backend/CI-CD/CD/kubernetes/deployment-svc.yml",       // required if you want to update deployment file (need Image also)
+    DEPLOYMENT_FILE: "expense-CD/backend/CD/kubernetes/deployment-svc.yml",       // required if you want to update deployment file (need Image also)
     GIT_REPO_NAME: "expense",
     VERSION_CONTROL_SYSTEM: "github",        // required (github/gitlab)  Defaults to 'github'
     GIT_DEPLOY_HTTPS_CREDS: "git-deploy-https-creds",
     
     // Update Image Tag in GitHub Deploy ECR 
     UPDATE_IMAGE_TAG_GITHUB_DEPLOY_ECR: "no",
-    DEPLOYMENT_FILE: "app-code/backend/CI-CD/CD/kubernetes/deployment-svc.yml",       // required if you want to update deployment file (need Image also)
+    DEPLOYMENT_FILE: "expense-CD/backend/CD/kubernetes/deployment-svc.yml",       // required if you want to update deployment file (need Image also)
     GIT_REPO_NAME: "expense",
     VERSION_CONTROL_SYSTEM: "github",        // required (github/gitlab)  Defaults to 'github'
     GIT_DEPLOY_HTTPS_CREDS: "git-deploy-https-creds",
 
     // Update Image Tag in GitHub Deploy HELM 
     UPDATE_IMAGE_TAG_GITHUB_DEPLOY_HELM: "yes",
-    HELM_VALUES_FILE: "app-code/backend/CI-CD/CD/helm/values-dockerHub.yml",      // required if you want to update helm values file
+    HELM_VALUES_FILE: "expense-CD/backend/CD/helm/values-dockerHub.yml",      // required if you want to update helm values file
     HELM_IMAGE_VERSION_KEY: "imageVersion",        // required if you want to edit 'HELM_VALUES_FILE'
     GIT_REPO_NAME: "expense",
     VERSION_CONTROL_SYSTEM: "github",        // required (github/gitlab)  Defaults to 'github'
