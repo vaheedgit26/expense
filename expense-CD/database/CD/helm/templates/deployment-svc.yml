@@ -55,13 +55,44 @@ spec:
               mountPath: /docker-entrypoint-initdb.d
               # subPath: init.sql  # Mount only init.sql, not the entire ConfigMap
 
+          # ───────────── Readiness Probe ─────────────
+          readinessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - mysqladmin ping -h 127.0.0.1 -uroot -p"$MYSQL_ROOT_PASSWORD"
+            initialDelaySeconds: 30
+            periodSeconds: 5
+            timeoutSeconds: 5
+
+          # ───────────── Startup Probe (safe) ─────────────
+          startupProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - mysqladmin ping -h 127.0.0.1 -uroot -p"$MYSQL_ROOT_PASSWORD"
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 30
+            timeoutSeconds: 5
+
+          # ───────────── Liveness Probe (optional, safe) ─────────────
+          livenessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - mysqladmin ping -h 127.0.0.1 -uroot -p"$MYSQL_ROOT_PASSWORD"
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
             
-            
-          
-
-          
-
-
+# Startup probe ensures MySQL isn’t killed too early.
+# Liveness probe is delayed to avoid false restarts.
+# Readiness probe controls traffic routing.
             
 ---
 apiVersion: v1
