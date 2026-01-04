@@ -20,11 +20,8 @@ spec:
       volumes:
         - name: mysql-init-db
           configMap:
-            name: mysql-initdb-config
-
-        - name: mysql-data
-          emptyDir: {}
-          
+            name: mysql-initdb-config  
+            
       containers:
         - name: mysql-cont
           image: mysql:8.0
