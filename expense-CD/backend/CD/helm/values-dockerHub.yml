@@ -3,4 +3,4 @@ image:
   imageVersion: 68eca7c
 
 deployment:
-  replicas: 2
+  replicas: 1
