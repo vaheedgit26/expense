@@ -55,8 +55,7 @@ spec:
               mountPath: /docker-entrypoint-initdb.d
               # subPath: init.sql  # Mount only init.sql, not the entire ConfigMap
 
-            - name: mysql-data
-              mountPath: /var/lib/mysql
+            
             
           
 
