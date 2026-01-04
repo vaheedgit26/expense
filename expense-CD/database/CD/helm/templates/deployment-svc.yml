@@ -58,46 +58,11 @@ spec:
             - name: mysql-data
               mountPath: /var/lib/mysql
             
-          # ─────────────────────────────
-          # STARTUP PROBE
-          # ───────────────────────────── 
-          # Purpose:
-          # - Give MySQL enough time to initialize
-          # - Prevent liveness probe from killing it during startup      
-          startupProbe:
-            exec:
-              command: ['sh', '-c', 'mysqladmin ping -h 127.0.0.1 -u healthcheck -p"$MYSQL_HEALTHCHECK_PASSWORD" >/dev/null 2>&1']
-            initialDelaySeconds: 15
-            failureThreshold: 30   # 30 × 5s = 150s max startup time
-            periodSeconds: 5 
-            timeoutSeconds: 10
+          
 
-          # ─────────────────────────────
-          # READINESS PROBE
-          # ─────────────────────────────
-          # Purpose:
-          # - Check if MySQL is ready to accept queries
-          # - Pod is removed from Service if this fails
-          readinessProbe:
-            exec:
-              command: ['sh', '-c', 'mysql -h 127.0.0.1 -u healthcheck -p"$MYSQL_HEALTHCHECK_PASSWORD" -e "SELECT 1" >/dev/null 2>&1']
-            initialDelaySeconds: 10
-            periodSeconds: 5
-            timeoutSeconds: 5
-            failureThreshold: 3
+          
 
-          # ─────────────────────────────
-          # LIVENESS PROBE
-          # ─────────────────────────────
-          # Purpose:
-          # - Restart container if MySQL is hung or dead
-          livenessProbe:
-            exec:
-              command: ['sh', '-c', 'mysqladmin -h 127.0.0.1 -u healthcheck -p"$MYSQL_HEALTHCHECK_PASSWORD" >/dev/null 2>&1']
-            initialDelaySeconds: 30
-            periodSeconds: 10
-            timeoutSeconds: 2
-            failureThreshold: 3
+
             
 ---
 apiVersion: v1
