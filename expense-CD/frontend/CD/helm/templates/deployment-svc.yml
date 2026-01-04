@@ -40,29 +40,30 @@ spec:
             - name: frontend
               containerPort: 8080
               
-          startupProbe:                # ✅ Moved to correct indentation
+          startupProbe:                
             tcpSocket:
               port: 8080
             initialDelaySeconds: 10
-            periodSeconds: 10
-            timeoutSeconds: 10
-            failureThreshold: 6
+            periodSeconds: 5
+            timeoutSeconds: 5
+            failureThreshold: 12
             
-          readinessProbe:              # ✅ Correct indentation
-            tcpSocket:
-              port: 8080
-            initialDelaySeconds: 10
-            periodSeconds: 10
-            timeoutSeconds: 10
-            failureThreshold: 3
-            
-          livenessProbe:               # ✅ Correct indentation
+          readinessProbe:
             httpGet:
               path: /nginx-health
               port: 8080
-            initialDelaySeconds: 10
+            initialDelaySeconds: 15
+            periodSeconds: 5
+            timeoutSeconds: 5
+            failureThreshold: 3
+            
+          livenessProbe:
+            httpGet:
+              path: /nginx-health
+              port: 8080
+            initialDelaySeconds: 30
             periodSeconds: 10
-            timeoutSeconds: 10
+            timeoutSeconds: 5
             failureThreshold: 3
           
 ---
@@ -83,4 +84,4 @@ spec:
       protocol: TCP
       port: 8080
       targetPort: 8080
-      nodePort: 32127
+      nodePort: 31000
