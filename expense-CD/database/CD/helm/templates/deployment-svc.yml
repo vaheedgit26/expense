@@ -21,11 +21,14 @@ spec:
         - name: mysql-init-db
           configMap:
             name: mysql-initdb-config
+
+        - name: mysql-data
+          emptyDir: {}
           
       containers:
         - name: mysql-cont
           image: mysql:8.0
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
 
           ports:
             - name: mysql
@@ -51,6 +54,9 @@ spec:
             - name: mysql-init-db
               mountPath: /docker-entrypoint-initdb.d
               # subPath: init.sql  # Mount only init.sql, not the entire ConfigMap
+
+            - name: mysql-data
+              mountPath: /var/lib/mysql
             
           # ─────────────────────────────
           # STARTUP PROBE
