@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: mysql
 spec: 
-  replicas: {{ .Values.deployment.replicas }}
+  replicas: 1
   selector:
     matchLabels:
       db: mysql
@@ -54,45 +54,56 @@ spec:
             - name: mysql-init-db
               mountPath: /docker-entrypoint-initdb.d
               # subPath: init.sql  # Mount only init.sql, not the entire ConfigMap
-
-          # ───────────── Readiness Probe ─────────────
-          readinessProbe:
-            exec:
-              command:
-                - sh
-                - -c
-                - mysqladmin ping -h 127.0.0.1 -uroot -p"$MYSQL_ROOT_PASSWORD"
-            initialDelaySeconds: 30
-            periodSeconds: 5
-            timeoutSeconds: 5
-
-          # ───────────── Startup Probe (safe) ─────────────
+            
+          # ─────────────────────────────
+          # STARTUP PROBE
+          # ───────────────────────────── 
+          # Purpose:
+          # - Give MySQL enough time to initialize
+          # - Prevent liveness probe from killing it during startup      
           startupProbe:
             exec:
               command:
                 - sh
                 - -c
-                - mysqladmin ping -h 127.0.0.1 -uroot -p"$MYSQL_ROOT_PASSWORD"
-            initialDelaySeconds: 5
+                - mysqladmin ping -h 127.0.0.1 -u healthcheck -p"$MYSQL_HEALTHCHECK_PASSWORD" >/dev/null 2>&1
+            initialDelaySeconds: 15
             periodSeconds: 5
-            failureThreshold: 30
             timeoutSeconds: 5
+            failureThreshold: 30
 
-          # ───────────── Liveness Probe (optional, safe) ─────────────
+          # ─────────────────────────────
+          # READINESS PROBE
+          # ─────────────────────────────
+          # Purpose:
+          # - Check if MySQL is ready to accept queries
+          # - Pod is removed from Service if this fails
+          readinessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - mysql -h 127.0.0.1 -u healthcheck -p"$MYSQL_HEALTHCHECK_PASSWORD" -e "SELECT 1" >/dev/null 2>&1
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 5
+            failureThreshold: 3
+
+          # ─────────────────────────────
+          # LIVENESS PROBE
+          # ─────────────────────────────
+          # Purpose:
+          # - Restart container if MySQL is hung or dead
           livenessProbe:
             exec:
               command:
                 - sh
                 - -c
-                - mysqladmin ping -h 127.0.0.1 -uroot -p"$MYSQL_ROOT_PASSWORD"
+                - mysqladmin ping -h 127.0.0.1 -u healthcheck -p"$MYSQL_HEALTHCHECK_PASSWORD" >/dev/null 2>&1
             initialDelaySeconds: 60
             periodSeconds: 10
-            timeoutSeconds: 5
+            timeoutSeconds: 2
             failureThreshold: 3
-            
-# Startup probe ensures MySQL isn’t killed too early.
-# Liveness probe is delayed to avoid false restarts.
-# Readiness probe controls traffic routing.
             
 ---
 apiVersion: v1
